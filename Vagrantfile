@@ -10,6 +10,7 @@ MACHINES = {
         #:ip_a ddr => '192.168.8.9',
 		:net => [
            ["192.168.8.2", 2, "255.255.255.0", "mynet"],
+		:box_version => "1804.02",
         ],
 	:disks => {
 		:sata1 => {
@@ -43,7 +44,7 @@ MACHINES = {
 Vagrant.configure("2") do |config|
 
   MACHINES.each do |boxname, boxconfig|
-
+		config.vm.synced_folder "sync/", "/vagrant", type: "rsync", create: "true"
       config.vm.define boxname do |box|
 
           box.vm.box = boxconfig[:box_name]
@@ -77,10 +78,10 @@ Vagrant.configure("2") do |config|
                   end
           end
 
-		#box.vm.provision "shell", path: "lvm.sh" #, when: :raid_6
-		box.vm.provision "shell", path: "dz_lvm.sh", name: "dz"
-		box.vm.provision "shell", path: "dz_lvm.sh", name: "dz1"
-		#box.vm.provison "shell", path: "update.sh" #, when: :raid_1 
+
+		#box.vm.provision "shell", path: "dz_lvm.sh", name: "dz"
+		#box.vm.provision "shell", path: "dz_lvm.sh", name: "dz1"
+
       end
   end
 end
