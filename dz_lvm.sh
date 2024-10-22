@@ -41,10 +41,14 @@ grub2-mkconfig -o /boot/grub2/grub.cfg
 #Обновим образ initrd.
 
 cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g; > s/.img//g"` --force; done
+dracut -v
+
 #/sbin/dracut -v initramfs-3.10.0-1160.102.1.el7.x86_64.img 3.10.0-1160.102.1.el7.x86_64 --force
 
 #для того, чтобы при загрузке был смонтирован нужны root нужно в файле /boot/grub2/grub.cfg 
 # заменить rd.lvm.lv=VolGroup00/LogVol00 на rd.lvm.lv=vg_root/lv_root
+# В rHel8.10 (linux oracle 8.10)  требуетя править также в файле  /boot/grub2/grubenv:
+# kernelopts=root=/dev/mapper/ol-root ro crashkernel=auto resume=/dev/mapper/ol-swap rd.lvm.lv=ol/root rd.lvm.lv=ol/swap rhgb quiet
 
 sed -i 's%VolGroup00/LogVol00%vg_root/lv_root%g' /boot/grub2/grub.cfg
 #sed -i 's%/dev/mapper/VolGroup00-LogVol00%/dev/vg_root/lv_root%g' /etc/fstab
